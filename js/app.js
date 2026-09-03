@@ -7,9 +7,34 @@
  *   - un renglón por capa dentro de cada módulo, con checkbox
  *     individual y control de opacidad
  *
- * Tipos de capa soportados: "wms", "tile" (XYZ), "geojson".
+ * Tipos de capa soportados: "wms", "tile" (XYZ), "imagen"
+ * (imageOverlay georreferenciado) y "geojson".
+ *
+ * La capa "geojson" admite, además de "estilo" fijo:
+ *   - comprimido: true        → el archivo .gz se descarga e infla con
+ *                                pako solo cuando la capa se activa
+ *                                (evita cargar datos pesados al inicio).
+ *   - colorPorClase: { campo, colores:{valor:color}, patrones:[[texto,color],...], defecto }
+ *                              → colorea cada feature según el valor de
+ *                                una propiedad (coincidencia exacta o,
+ *                                si no hay, subcadena insensible a mayúsculas).
+ *   - reglas: [{campo, incluye, color, fillColor, dashArray, weight}, ...]
+ *                              → primera regla cuyo campo contiene el
+ *                                texto indicado (insensible a mayúsculas)
+ *                                gana; el resto de propiedades de estilo
+ *                                se completa con "estilo".
+ *   - tooltipHover: true + camposTooltip:[["Etiqueta","campo"],...]
+ *                              → tooltip flotante al pasar el cursor en
+ *                                vez de popup al hacer clic.
+ *   - resaltarHover: {color, weight} → resalta la geometría (líneas) al
+ *                                pasar el cursor.
+ *
+ * Un "modulo" con "exclusivo": true activa como máximo una capa a la
+ * vez dentro del grupo (p. ej. cobertura forestal por año).
+ *
  * Para agregar capas o módulos nuevos basta editar
- * config/capas.json — no es necesario tocar este archivo.
+ * config/capas.json — no es necesario tocar este archivo, salvo para
+ * simbologías nuevas que no encajen en los mecanismos anteriores.
  */
 
 let map;
@@ -89,21 +114,28 @@ function construirModulos(modulos) {
     const wrap = document.createElement('div');
     wrap.className = 'modulo' + (modulo.abierto ? ' open' : '');
     wrap.dataset.moduloId = modulo.id;
+    if (modulo.exclusivo) wrap.dataset.exclusivo = '1';
 
     const activas = modulo.capas.filter(c => c.activaPorDefecto).length;
+    const chkModuloHtml = modulo.exclusivo
+      ? '<span class="mi-radio" title="Solo una capa activa a la vez">◎</span>'
+      : `<input type="checkbox" class="chk-modulo" ${activas === modulo.capas.length ? 'checked' : ''}>`;
+    const accionesHtml = modulo.exclusivo
+      ? '<div class="acciones-modulo"><button type="button" data-accion="desactivar">Desactivar capa activa</button></div>'
+      : `<div class="acciones-modulo">
+          <button type="button" data-accion="activar">Activar todas</button>
+          <button type="button" data-accion="desactivar">Desactivar todas</button>
+        </div>`;
     wrap.innerHTML = `
       <div class="modulo-head">
-        <input type="checkbox" class="chk-modulo" ${activas === modulo.capas.length ? 'checked' : ''}>
+        ${chkModuloHtml}
         <span class="mi">${modulo.icono || '🗂️'}</span>
         <span class="mn">${modulo.nombre}</span>
         <span class="mc">${activas}/${modulo.capas.length}</span>
         <span class="chev">▾</span>
       </div>
       <div class="modulo-body">
-        <div class="acciones-modulo">
-          <button type="button" data-accion="activar">Activar todas</button>
-          <button type="button" data-accion="desactivar">Desactivar todas</button>
-        </div>
+        ${accionesHtml}
       </div>`;
 
     const head = wrap.querySelector('.modulo-head');
@@ -119,16 +151,21 @@ function construirModulos(modulos) {
       wrap.classList.toggle('open');
     });
 
-    chkModulo.addEventListener('change', () => {
-      setCapasDeModulo(modulo.capas.map(c => c.id), chkModulo.checked);
-      actualizarBadgeModulo(wrap);
-    });
+    if (chkModulo) {
+      chkModulo.addEventListener('change', () => {
+        setCapasDeModulo(modulo.capas.map(c => c.id), chkModulo.checked);
+        actualizarBadgeModulo(wrap);
+      });
+    }
 
-    wrap.querySelector('[data-accion="activar"]').addEventListener('click', (ev) => {
-      ev.stopPropagation();
-      setCapasDeModulo(modulo.capas.map(c => c.id), true);
-      actualizarBadgeModulo(wrap);
-    });
+    const btnActivar = wrap.querySelector('[data-accion="activar"]');
+    if (btnActivar) {
+      btnActivar.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        setCapasDeModulo(modulo.capas.map(c => c.id), true);
+        actualizarBadgeModulo(wrap);
+      });
+    }
     wrap.querySelector('[data-accion="desactivar"]').addEventListener('click', (ev) => {
       ev.stopPropagation();
       setCapasDeModulo(modulo.capas.map(c => c.id), false);
@@ -161,6 +198,16 @@ function crearFilaCapa(capa, moduloEl) {
   const opVal = row.querySelector('.op-val');
 
   chk.addEventListener('change', () => {
+    if (chk.checked && moduloEl.dataset.exclusivo) {
+      moduloEl.querySelectorAll('.capa-row').forEach(otraFila => {
+        if (otraFila === row) return;
+        const otroChk = otraFila.querySelector('input[type=checkbox]');
+        if (otroChk && otroChk.checked) {
+          otroChk.checked = false;
+          toggleCapa(otraFila.dataset.capaId, false);
+        }
+      });
+    }
     toggleCapa(capa.id, chk.checked);
     actualizarBadgeModulo(moduloEl);
   });
@@ -168,7 +215,9 @@ function crearFilaCapa(capa, moduloEl) {
     opVal.textContent = Math.round(op.value * 100) + '%';
     const lyr = capaInstancias.get(capa.id);
     if (lyr && lyr.setOpacity) lyr.setOpacity(parseFloat(op.value));
-    if (lyr && lyr.setStyle) lyr.setStyle({ fillOpacity: parseFloat(op.value) * 0.5, opacity: parseFloat(op.value) });
+    // Para capas vectoriales, el control ajusta solo el relleno: el trazo
+    // (color/grosor) de cada feature mantiene la simbología definida.
+    if (lyr && lyr.setStyle) lyr.setStyle({ fillOpacity: parseFloat(op.value) });
   });
 
   if (capa.atribucion) {
@@ -194,8 +243,10 @@ function actualizarBadgeModulo(moduloEl) {
   const activas = moduloEl.querySelectorAll('.capa-row input[type=checkbox]:checked').length;
   moduloEl.querySelector('.mc').textContent = `${activas}/${total}`;
   const chkModulo = moduloEl.querySelector('.chk-modulo');
-  chkModulo.checked = activas === total;
-  chkModulo.indeterminate = activas > 0 && activas < total;
+  if (chkModulo) {
+    chkModulo.checked = activas === total;
+    chkModulo.indeterminate = activas > 0 && activas < total;
+  }
 }
 
 function setTodasLasCapas(activar) {
@@ -244,20 +295,22 @@ function crearCapa(def) {
     });
   }
 
+  if (def.tipo === 'imagen') {
+    return L.imageOverlay(def.url, def.bounds, {
+      opacity: opacidad,
+      interactive: false,
+      attribution: def.atribucion || '',
+    });
+  }
+
   if (def.tipo === 'geojson') {
     const grupo = L.layerGroup();
-    fetch(def.url).then(r => r.json()).then(geojson => {
+    const origen = def.comprimido ? cargarGeoJSONComprimido(def.url) : fetch(def.url).then(r => r.json());
+    origen.then(geojson => {
       const capaLeaflet = L.geoJSON(geojson, {
-        style: () => (def.estilo || { color: '#4a7cc4', weight: 2, fillOpacity: 0.15 }),
-        pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 6, color: def.estilo?.color || '#4a7cc4' }),
-        onEachFeature: (feature, layer) => {
-          const campo = def.campoEtiqueta;
-          const props = feature.properties || {};
-          if (campo && props[campo]) layer.bindPopup(String(props[campo]));
-          else if (Object.keys(props).length) {
-            layer.bindPopup(Object.entries(props).map(([k, v]) => `<b>${k}:</b> ${v}`).join('<br>'));
-          }
-        },
+        style: feature => estiloFeature(def, feature),
+        pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 6, color: estiloFeature(def, feature).color }),
+        onEachFeature: (feature, layer) => vincularInteraccion(def, feature, layer),
       });
       grupo.addLayer(capaLeaflet);
       grupo._geo = capaLeaflet;
@@ -267,6 +320,82 @@ function crearCapa(def) {
 
   console.warn('Tipo de capa no soportado:', def.tipo);
   return null;
+}
+
+/* ───────────────────────── Descarga comprimida (gzip + pako) ───────────────────────── */
+
+function cargarGeoJSONComprimido(url) {
+  return fetch(url)
+    .then(r => r.arrayBuffer())
+    .then(buf => JSON.parse(pako.inflate(new Uint8Array(buf), { to: 'string' })));
+}
+
+/* ───────────────────────── Simbología por atributo ───────────────────────── */
+
+function escHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function estiloFeature(def, feature) {
+  const props = feature.properties || {};
+  const base = Object.assign({ color: '#4a7cc4', weight: 2, fillOpacity: 0.15, opacity: 1 }, def.estilo || {});
+  let estilo = base;
+
+  if (def.colorPorClase) {
+    const cfg = def.colorPorClase;
+    const valor = props[cfg.campo];
+    let color = cfg.colores && valor != null ? cfg.colores[valor] : undefined;
+    if (!color && cfg.patrones) {
+      const norm = String(valor || '').toLowerCase();
+      const hit = cfg.patrones.find(([texto]) => norm.includes(texto));
+      if (hit) color = hit[1];
+    }
+    if (!color) color = cfg.defecto || base.color;
+    estilo = Object.assign({}, base, { color, fillColor: color });
+  } else if (def.reglas) {
+    const regla = def.reglas.find(r => String(props[r.campo] || '').toLowerCase().includes(r.incluye.toLowerCase()));
+    if (regla) estilo = Object.assign({}, base, regla);
+  }
+
+  if (def.reglasLinea) {
+    const reglaLinea = def.reglasLinea.find(r => String(props[r.campo] || '').toLowerCase().includes(r.incluye.toLowerCase()));
+    if (reglaLinea) estilo = Object.assign({}, estilo, { dashArray: reglaLinea.dashArray });
+  }
+
+  return estilo;
+}
+
+function vincularInteraccion(def, feature, layer) {
+  const props = feature.properties || {};
+
+  if (def.tooltipHover) {
+    let html = '';
+    if (def.tooltipFijo) {
+      html = def.tooltipFijo;
+    } else if (def.camposTooltip && def.camposTooltip.length) {
+      html = def.camposTooltip
+        .map(([etiqueta, campo]) => {
+          const v = props[campo];
+          return v != null && v !== '' ? `<b>${escHtml(etiqueta)}:</b> ${escHtml(v)}` : null;
+        })
+        .filter(Boolean).join('<br>');
+    } else if (def.campoEtiqueta) {
+      html = escHtml(props[def.campoEtiqueta] || def.etiquetaVacia || '');
+    }
+    if (html) layer.bindTooltip(html, { sticky: true, className: 'itt' });
+  } else {
+    const campo = def.campoEtiqueta;
+    if (campo && props[campo]) layer.bindPopup(String(props[campo]));
+    else if (Object.keys(props).length) {
+      layer.bindPopup(Object.entries(props).map(([k, v]) => `<b>${escHtml(k)}:</b> ${escHtml(v)}`).join('<br>'));
+    }
+  }
+
+  if (def.resaltarHover && layer.setStyle) {
+    const estiloBase = estiloFeature(def, feature);
+    layer.on('mouseover', () => layer.setStyle(Object.assign({}, estiloBase, def.resaltarHover)));
+    layer.on('mouseout', () => layer.setStyle(estiloBase));
+  }
 }
 
 /* ───────────────────────── Utilidades ───────────────────────── */
