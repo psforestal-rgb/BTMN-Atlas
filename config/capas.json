@@ -1,0 +1,112 @@
+{
+  "titulo": "Visor Modular de Capas",
+  "subtitulo": "Activación de capas por módulo — plantilla reutilizable",
+  "vista": { "centro": [9.55, -83.75], "zoom": 9, "minZoom": 5, "maxZoom": 22 },
+  "basemaps": [
+    {
+      "id": "osm",
+      "nombre": "OpenStreetMap",
+      "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "subdominios": "abc",
+      "atribucion": "&copy; <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\" rel=\"noopener\">OpenStreetMap</a>",
+      "maxZoom": 19,
+      "porDefecto": true
+    },
+    {
+      "id": "esri-sat",
+      "nombre": "Satélite (Esri World Imagery)",
+      "url": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      "atribucion": "Esri, Maxar, Earthstar Geographics",
+      "maxNativeZoom": 19,
+      "maxZoom": 22
+    }
+  ],
+  "modulos": [
+    {
+      "id": "ortofotos",
+      "nombre": "Ortofotos SNIT",
+      "icono": "🛰️",
+      "abierto": true,
+      "capas": [
+        {
+          "id": "orto0507",
+          "nombre": "Ortofoto 2005–2007 (esc. 1:5000)",
+          "tipo": "wms",
+          "url": "https://geos0.snitcr.go.cr/cgi-bin/web",
+          "params": { "layers": "Mosaico5000", "format": "image/png", "transparent": true, "version": "1.1.1", "map": "ortofoto.map" },
+          "opacidad": 0.9,
+          "activaPorDefecto": false,
+          "maxZoom": 21,
+          "atribucion": "IGN / SNIT — Costa Rica"
+        },
+        {
+          "id": "orto1417",
+          "nombre": "Ortofoto 2014–2017 (alta resolución)",
+          "tipo": "wms",
+          "url": "https://geos1.snitcr.go.cr/Ortofoto2017/wms",
+          "params": { "layers": "ortofoto2017_5000_altaresolucion", "format": "image/png", "transparent": true, "version": "1.1.1" },
+          "opacidad": 0.9,
+          "activaPorDefecto": true,
+          "maxZoom": 21,
+          "atribucion": "IGN / SNIT — Costa Rica"
+        }
+      ]
+    },
+    {
+      "id": "hidrologia",
+      "nombre": "Hidrología — Dirección de Agua (MINAE)",
+      "icono": "💧",
+      "abierto": false,
+      "capas": [
+        {
+          "id": "da-bananito",
+          "nombre": "Reserva acuífera cuenca Río Bananito",
+          "tipo": "wms",
+          "url": "https://mapas.da.go.cr/geopc.php",
+          "params": { "layers": "Aguas:AyA_AREA_DE_RESERVA_ACUIFERA_CUENCA_DEL_RIO_BANANITO", "format": "image/png", "transparent": true, "version": "1.1.1" },
+          "opacidad": 0.85,
+          "activaPorDefecto": false,
+          "atribucion": "Dirección de Agua (MINAE) — mapas.da.go.cr"
+        },
+        {
+          "id": "da-puentemulas",
+          "nombre": "Reserva acuífera Puente de Mulas",
+          "tipo": "wms",
+          "url": "https://mapas.da.go.cr/geopc.php",
+          "params": { "layers": "Aguas:AyA_AREA_DE_RESERVA_ACUIFERA_PUENTE_MULAS", "format": "image/png", "transparent": true, "version": "1.1.1" },
+          "opacidad": 0.85,
+          "activaPorDefecto": false,
+          "atribucion": "Dirección de Agua (MINAE) — mapas.da.go.cr"
+        },
+        {
+          "id": "da-guacimo",
+          "nombre": "Reserva acuífera de Guácimo",
+          "tipo": "wms",
+          "url": "https://mapas.da.go.cr/geopc.php",
+          "params": { "layers": "Aguas:AyA_RESERVA_ACUIFERA_DE_GUACIMO", "format": "image/png", "transparent": true, "version": "1.1.1" },
+          "opacidad": 0.85,
+          "activaPorDefecto": false,
+          "atribucion": "Dirección de Agua (MINAE) — mapas.da.go.cr"
+        }
+      ]
+    },
+    {
+      "id": "vector-local",
+      "nombre": "Datos locales de ejemplo",
+      "icono": "📍",
+      "abierto": false,
+      "capas": [
+        {
+          "id": "demo-poligono",
+          "nombre": "Polígono de ejemplo (GeoJSON local)",
+          "tipo": "geojson",
+          "url": "data/ejemplo.geojson",
+          "estilo": { "color": "#d9b14a", "weight": 2, "fillColor": "#d9b14a", "fillOpacity": 0.15 },
+          "activaPorDefecto": true,
+          "campoEtiqueta": "nombre",
+          "atribucion": "Datos de ejemplo — reemplazar por capa propia"
+        }
+      ]
+    }
+  ]
+}

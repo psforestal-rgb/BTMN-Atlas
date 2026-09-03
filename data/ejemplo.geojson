@@ -1,0 +1,24 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "nombre": "Zona de ejemplo",
+        "descripcion": "Polígono de demostración. Sustituya este archivo por su propia capa GeoJSON."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-83.80, 9.60],
+            [-83.70, 9.60],
+            [-83.70, 9.50],
+            [-83.80, 9.50],
+            [-83.80, 9.60]
+          ]
+        ]
+      }
+    }
+  ]
+}

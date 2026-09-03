@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Visor Modular de Capas</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div id="header">
+  <button id="menu-btn" aria-label="Mostrar/ocultar panel de capas">☰</button>
+  <div>
+    <h1 id="titulo-app">Visor Modular de Capas</h1>
+    <div class="sub" id="subtitulo-app"></div>
+  </div>
+</div>
+
+<div id="main">
+  <aside id="sidebar">
+    <div class="basemap-card">
+      <div class="pt">Mapa base</div>
+      <div id="basemaps-list"></div>
+    </div>
+
+    <div id="modulos-list"></div>
+
+    <div id="acciones-globales">
+      <button id="btn-todo-off" type="button">Desactivar todas las capas</button>
+      <button id="btn-restablecer" type="button">Restablecer vista</button>
+    </div>
+
+    <div class="leyenda">
+      Plantilla de visor modular basada en Leaflet. Edite
+      <code>config/capas.json</code> para agregar módulos y capas propias
+      (WMS, teselas XYZ o GeoJSON) sin modificar el código.
+    </div>
+  </aside>
+
+  <div id="map"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
