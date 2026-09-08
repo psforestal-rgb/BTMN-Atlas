@@ -39,6 +39,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
 .modulo-head:hover{background:rgba(255,255,255,.03)}
 .modulo-head input[type=checkbox]{accent-color:var(--gold);cursor:pointer;width:17px;height:17px;flex:0 0 17px}
 .modulo-head .mi{font-size:16px;flex:0 0 auto}
+.modulo-head .mi-radio{font-size:15px;flex:0 0 17px;text-align:center;color:var(--gold)}
 .modulo-head .mn{flex:1;font-size:13.5px;font-weight:700;color:var(--txt);letter-spacing:.2px}
 .modulo-head .mc{font-size:10.5px;color:var(--txt2);background:#0b1b35;border:1px solid var(--line);
   border-radius:8px;padding:1px 6px}

@@ -1,7 +1,15 @@
 {
-  "titulo": "Visor Modular de Capas",
-  "subtitulo": "Activación de capas por módulo — plantilla reutilizable",
-  "vista": { "centro": [9.55, -83.75], "zoom": 9, "minZoom": 5, "maxZoom": 22 },
+  "titulo": "BTMN Atlas — Cobertura Forestal y Capas BTMM (PNLQ)",
+  "subtitulo": "Mismas capas y simbología que BTMM-Visados — carga rápida por capa, bajo demanda",
+  "vista": {
+    "centro": [
+      9.62,
+      -83.75
+    ],
+    "zoom": 11,
+    "minZoom": 5,
+    "maxZoom": 22
+  },
   "basemaps": [
     {
       "id": "osm",
@@ -17,23 +25,39 @@
       "nombre": "Satélite (Esri World Imagery)",
       "url": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       "atribucion": "Esri, Maxar, Earthstar Geographics",
-      "maxNativeZoom": 19,
+      "maxNativeZoom": 17,
       "maxZoom": 22
     }
   ],
   "modulos": [
     {
       "id": "ortofotos",
-      "nombre": "Ortofotos SNIT",
+      "nombre": "Imágenes aéreas — Ortofotos SNIT-IGN",
       "icono": "🛰️",
       "abierto": true,
       "capas": [
+        {
+          "id": "terra1997",
+          "nombre": "Ortofoto TERRA 1997 (1:40 000)",
+          "tipo": "tile",
+          "url": "https://geos1.snitcr.go.cr/Ortofoto_TERRA_1997_40k/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=mosaico_ortofoto_terra_1997_40k&STYLE=_empty&FORMAT=image/png&TILEMATRIXSET=EPSG:3857&TILEMATRIX=EPSG:3857:{z}&TILEROW={y}&TILECOL={x}",
+          "opacidad": 0.9,
+          "activaPorDefecto": false,
+          "maxZoom": 20,
+          "atribucion": "IGN / SNIT — Costa Rica"
+        },
         {
           "id": "orto0507",
           "nombre": "Ortofoto 2005–2007 (esc. 1:5000)",
           "tipo": "wms",
           "url": "https://geos0.snitcr.go.cr/cgi-bin/web",
-          "params": { "layers": "Mosaico5000", "format": "image/png", "transparent": true, "version": "1.1.1", "map": "ortofoto.map" },
+          "params": {
+            "layers": "Mosaico5000",
+            "format": "image/png",
+            "transparent": true,
+            "version": "1.1.1",
+            "map": "ortofoto.map"
+          },
           "opacidad": 0.9,
           "activaPorDefecto": false,
           "maxZoom": 21,
@@ -44,7 +68,12 @@
           "nombre": "Ortofoto 2014–2017 (alta resolución)",
           "tipo": "wms",
           "url": "https://geos1.snitcr.go.cr/Ortofoto2017/wms",
-          "params": { "layers": "ortofoto2017_5000_altaresolucion", "format": "image/png", "transparent": true, "version": "1.1.1" },
+          "params": {
+            "layers": "ortofoto2017_5000_altaresolucion",
+            "format": "image/png",
+            "transparent": true,
+            "version": "1.1.1"
+          },
           "opacidad": 0.9,
           "activaPorDefecto": true,
           "maxZoom": 21,
@@ -53,17 +82,613 @@
       ]
     },
     {
-      "id": "hidrologia",
-      "nombre": "Hidrología — Dirección de Agua (MINAE)",
+      "id": "cobertura",
+      "nombre": "Cobertura Forestal (SINAC / FONAFIFO) — orden cronológico",
+      "icono": "🌳",
+      "abierto": true,
+      "exclusivo": true,
+      "capas": [
+        {
+          "id": "fn2000",
+          "nombre": "FONAFIFO 2000",
+          "tipo": "geojson",
+          "url": "data/cobertura/fn2000.geojson.gz",
+          "comprimido": true,
+          "colorPorClase": {
+            "campo": "clase",
+            "colores": {
+              "Bosque": "#276221",
+              "Agropecuario": "#c8a840",
+              "Páramo": "#8b5e9e",
+              "Agua": "#3498db",
+              "Deforestación 97-00": "#e74c3c",
+              "Nubes": "#95a5a6",
+              "Regeneración forestal": "#2ecc71"
+            },
+            "defecto": "#e17055"
+          },
+          "estilo": {
+            "weight": 0.5,
+            "opacity": 0.8,
+            "fillOpacity": 0.75
+          },
+          "opacidad": 0.75,
+          "activaPorDefecto": false,
+          "tooltipHover": true,
+          "camposTooltip": [
+            [
+              "Clase",
+              "clase"
+            ]
+          ],
+          "atribucion": "FONAFIFO / CENIGA. Campo original: USO_COBERT."
+        },
+        {
+          "id": "fn2005",
+          "nombre": "FONAFIFO 2005",
+          "tipo": "geojson",
+          "url": "data/cobertura/fn2005.geojson.gz",
+          "comprimido": true,
+          "colorPorClase": {
+            "campo": "clase",
+            "colores": {
+              "Forestal": "#1e5c1a",
+              "No forestal": "#c8a840",
+              "Bosque intermedio > 15 años": "#3aae56",
+              "Paramo": "#7b2d8b",
+              "Plantaciones forestales": "#66b030",
+              "Bosque secundario": "#88cc55",
+              "Cafe": "#8b4513",
+              "Deforestacion": "#cc3300",
+              "Agua": "#1a6fa0",
+              "Uso urbano": "#666680"
+            },
+            "defecto": "#e17055"
+          },
+          "estilo": {
+            "weight": 0.5,
+            "opacity": 0.8,
+            "fillOpacity": 0.75
+          },
+          "opacidad": 0.75,
+          "activaPorDefecto": false,
+          "tooltipHover": true,
+          "camposTooltip": [
+            [
+              "Clase",
+              "clase"
+            ]
+          ],
+          "atribucion": "FONAFIFO / CENIGA. Campo original: cobertura. ⚙️ Capa ajustada: traslación rígida de +210 m en X y −150 m en Y (CRTM05/EPSG:5367) respecto a FONAFIFO 2000; no se modificó la geometría interna (mismas áreas, vértices y topología). Uso agropecuario / No forestal se simboliza en amarillo."
+        },
+        {
+          "id": "tb2012",
+          "nombre": "Tipos de Bosque 2012",
+          "tipo": "geojson",
+          "url": "data/cobertura/tb2012.geojson.gz",
+          "comprimido": true,
+          "colorPorClase": {
+            "campo": "clase",
+            "colores": {
+              "Bosque maduro": "#14692f",
+              "Bosque secundario": "#52b96a",
+              "Plantación forestal": "#86c93f",
+              "Pastos": "#d4c84a",
+              "No forestal": "#a0703c",
+              "Páramo": "#8b5e9e",
+              "Nubes": "#b0b0b8",
+              "Sombra de nubes": "#7a7a85"
+            },
+            "defecto": "#e17055"
+          },
+          "estilo": {
+            "weight": 0.5,
+            "opacity": 0.8,
+            "fillOpacity": 0.75
+          },
+          "opacidad": 0.75,
+          "activaPorDefecto": false,
+          "tooltipHover": true,
+          "camposTooltip": [
+            [
+              "Clase",
+              "clase"
+            ]
+          ],
+          "atribucion": "SINAC. Campo original: TipoBosque."
+        },
+        {
+          "id": "cf2021",
+          "nombre": "Cobertura Forestal 2021",
+          "tipo": "geojson",
+          "url": "data/cobertura/cf2021.geojson.gz",
+          "comprimido": true,
+          "colorPorClase": {
+            "campo": "clase",
+            "colores": {
+              "Bosque maduro": "#1a7c3e",
+              "Bosque secundario": "#5dba6e"
+            },
+            "defecto": "#e17055"
+          },
+          "estilo": {
+            "weight": 0.5,
+            "opacity": 0.8,
+            "fillOpacity": 0.75
+          },
+          "opacidad": 0.75,
+          "activaPorDefecto": false,
+          "tooltipHover": true,
+          "camposTooltip": [
+            [
+              "Clase",
+              "clase"
+            ]
+          ],
+          "atribucion": "SINAC. Campo original: Clase."
+        },
+        {
+          "id": "cf2023",
+          "nombre": "Cobertura Forestal 2023",
+          "tipo": "geojson",
+          "url": "data/cobertura/cf2023.geojson.gz",
+          "comprimido": true,
+          "colorPorClase": {
+            "campo": "clase",
+            "colores": {
+              "Bosque maduro": "#0d5c2e",
+              "Bosque secundario": "#4aad62"
+            },
+            "defecto": "#e17055"
+          },
+          "estilo": {
+            "weight": 0.5,
+            "opacity": 0.8,
+            "fillOpacity": 0.75
+          },
+          "opacidad": 0.75,
+          "activaPorDefecto": true,
+          "tooltipHover": true,
+          "camposTooltip": [
+            [
+              "Clase",
+              "clase"
+            ]
+          ],
+          "atribucion": "SINAC. Campo original: Clase."
+        }
+      ]
+    },
+    {
+      "id": "asp",
+      "nombre": "Áreas Silvestres Protegidas (ASP)",
+      "icono": "🏞️",
+      "abierto": false,
+      "capas": [
+        {
+          "id": "asp",
+          "nombre": "Áreas Silvestres Protegidas — BTMM",
+          "tipo": "geojson",
+          "url": "data/asp/asp.geojson",
+          "colorPorClase": {
+            "campo": "nombre_asp",
+            "patrones": [
+              [
+                "quetzal",
+                "#1b9e77"
+              ],
+              [
+                "vuelta",
+                "#e6820e"
+              ],
+              [
+                "tapant",
+                "#2f6fd0"
+              ],
+              [
+                "macho",
+                "#7b3fb5"
+              ],
+              [
+                "navarro",
+                "#e6194b"
+              ],
+              [
+                "sombrero",
+                "#e6194b"
+              ]
+            ],
+            "defecto": "#17a2a2"
+          },
+          "estilo": {
+            "weight": 1.4,
+            "opacity": 0.98,
+            "fillOpacity": 0.24
+          },
+          "opacidad": 0.24,
+          "activaPorDefecto": false,
+          "tooltipHover": true,
+          "camposTooltip": [
+            [
+              "Nombre",
+              "nombre_asp"
+            ],
+            [
+              "Categoría de manejo",
+              "cat_manejo"
+            ],
+            [
+              "Estatus",
+              "estatus"
+            ]
+          ],
+          "atribucion": "SINAC — información publicada en SNIT"
+        }
+      ]
+    },
+    {
+      "id": "fincas-pne",
+      "nombre": "Fincas estatales y Patrimonio Natural del Estado",
+      "icono": "🗺️",
+      "abierto": false,
+      "capas": [
+        {
+          "id": "carretera2km",
+          "nombre": "Buffer 2 km Carretera Interamericana",
+          "tipo": "geojson",
+          "url": "data/pne/buffer_carretera_2km.geojson",
+          "estilo": {
+            "color": "#e6820e",
+            "fillColor": "#e6820e",
+            "weight": 1.4,
+            "opacity": 0.97,
+            "fillOpacity": 0.22
+          },
+          "opacidad": 0.22,
+          "activaPorDefecto": false,
+          "tooltipHover": true,
+          "camposTooltip": [
+            [
+              "Vía",
+              "nombre"
+            ],
+            [
+              "N.° de ruta",
+              "num_ruta"
+            ]
+          ],
+          "atribucion": "SNIT — Costa Rica"
+        },
+        {
+          "id": "pnesnit",
+          "nombre": "PNE del SNIT",
+          "tipo": "geojson",
+          "url": "data/pne/pne_snit.geojson",
+          "estilo": {
+            "color": "#2f6fd0",
+            "fillColor": "#2f6fd0",
+            "weight": 1.4,
+            "opacity": 0.97,
+            "fillOpacity": 0.22
+          },
+          "opacidad": 0.22,
+          "activaPorDefecto": false,
+          "tooltipHover": true,
+          "camposTooltip": [
+            [
+              "N.° de finca",
+              "n_finca"
+            ],
+            [
+              "Plano",
+              "plano"
+            ],
+            [
+              "Categoría",
+              "categoria"
+            ]
+          ],
+          "atribucion": "SINAC — información del SNIT"
+        },
+        {
+          "id": "terrenos3000",
+          "nombre": "Terrenos sobre 3000 m",
+          "tipo": "geojson",
+          "url": "data/pne/terrenos_3000m.geojson",
+          "estilo": {
+            "color": "#7b3fb5",
+            "fillColor": "#7b3fb5",
+            "weight": 1.4,
+            "opacity": 0.97,
+            "fillOpacity": 0.22
+          },
+          "opacidad": 0.22,
+          "activaPorDefecto": false,
+          "tooltipHover": true,
+          "camposTooltip": [
+            [
+              "Objeto",
+              "nom_objeto"
+            ],
+            [
+              "Elevación (m)",
+              "elevacion"
+            ]
+          ],
+          "atribucion": "SNIT — Costa Rica"
+        },
+        {
+          "id": "fincasacc",
+          "nombre": "Fincas del Estado (ACC)",
+          "tipo": "geojson",
+          "url": "data/pne/fincas_estado_acc.geojson",
+          "estilo": {
+            "color": "#1b9e77",
+            "fillColor": "#1b9e77",
+            "weight": 1.4,
+            "opacity": 0.97,
+            "fillOpacity": 0.22
+          },
+          "opacidad": 0.22,
+          "activaPorDefecto": false,
+          "tooltipHover": true,
+          "camposTooltip": [
+            [
+              "N.° de finca",
+              "N_FINCA"
+            ],
+            [
+              "Plano",
+              "PLANO"
+            ],
+            [
+              "Propietario",
+              "PROPIET"
+            ],
+            [
+              "Categoría",
+              "CATEGORIA"
+            ]
+          ],
+          "atribucion": "Área de Conservación Central (ACC)"
+        },
+        {
+          "id": "tenencia1966raster",
+          "nombre": "Tenencia histórica R.F. Río Macho 1966 — ráster base",
+          "tipo": "imagen",
+          "url": "data/pne/tenencia_rfrm_1966.webp",
+          "bounds": [
+            [
+              9.510085,
+              -83.958052
+            ],
+            [
+              9.818615,
+              -83.4385067
+            ]
+          ],
+          "opacidad": 0.62,
+          "activaPorDefecto": false,
+          "atribucion": "Digitalización sobre Mapa de Tenencia de la Tierra R.F. Río Macho (MIRENEM–Dirección General Forestal, ITCO, junio 1966). Incertidumbre planimétrica ≈100 m; referencia histórico-administrativa, no sustituye catastro ni registro."
+        },
+        {
+          "id": "tenencia1966vector",
+          "nombre": "Tenencia histórica R.F. Río Macho 1966 — polígonos (ITCO)",
+          "tipo": "geojson",
+          "url": "data/pne/tenencia_rfrm_1966.geojson",
+          "reglas": [
+            {
+              "campo": "DETALLE",
+              "incluye": "catie",
+              "color": "#168f9c",
+              "fillColor": "#b9e4e7"
+            },
+            {
+              "campo": "CLASE",
+              "incluye": "investiga",
+              "color": "#207a3b",
+              "fillColor": "#cde8d2"
+            },
+            {
+              "campo": "CLASE",
+              "incluye": "f.p. nacionales",
+              "color": "#d88b18",
+              "fillColor": "#f7df75"
+            },
+            {
+              "campo": "CLASE",
+              "incluye": "r.f. rio macho",
+              "color": "#ef7f35",
+              "fillColor": "#ffd0a6"
+            },
+            {
+              "campo": "CLASE",
+              "incluye": "r.f. río macho",
+              "color": "#ef7f35",
+              "fillColor": "#ffd0a6"
+            },
+            {
+              "campo": "CLASE",
+              "incluye": "finca del estado",
+              "color": "#d94d93",
+              "fillColor": "#f4b6d2"
+            }
+          ],
+          "reglasLinea": [
+            {
+              "campo": "RELAC. ASP",
+              "incluye": "parcial",
+              "dashArray": "9 5"
+            },
+            {
+              "campo": "RELAC. ASP",
+              "incluye": "fuera",
+              "dashArray": "3 4"
+            }
+          ],
+          "estilo": {
+            "color": "#a23b72",
+            "fillColor": "#f7dce9",
+            "weight": 1.5,
+            "opacity": 0.98,
+            "fillOpacity": 0.2
+          },
+          "opacidad": 0.2,
+          "activaPorDefecto": false,
+          "tooltipHover": true,
+          "camposTooltip": [
+            [
+              "ID",
+              "id"
+            ],
+            [
+              "Propietario ITCO",
+              "ITCO_PROP"
+            ],
+            [
+              "Símbolo",
+              "ITCO_SIMB"
+            ],
+            [
+              "Monto pagado",
+              "ITCO_MONTO"
+            ],
+            [
+              "Observación",
+              "ITCO_OBS"
+            ],
+            [
+              "Clase",
+              "CLASE"
+            ],
+            [
+              "Detalle",
+              "DETALLE"
+            ],
+            [
+              "Relación con ASP",
+              "RELAC. ASP"
+            ]
+          ],
+          "atribucion": "Digitalización manual parcial sobre el mapa ITCO 1966; unión por identificador con el listado ITCO 1966."
+        }
+      ]
+    },
+    {
+      "id": "terrenos-forestales",
+      "nombre": "Terrenos forestales — relieve, inundación y humedales",
+      "icono": "⛰️",
+      "abierto": false,
+      "capas": [
+        {
+          "id": "relieve",
+          "nombre": "Relieve — clases de pendiente",
+          "tipo": "imagen",
+          "url": "data/terrenos/relieve.png",
+          "bounds": [
+            [
+              9.512910817657273,
+              -84.00521483170932
+            ],
+            [
+              9.819726271831815,
+              -83.40947815552266
+            ]
+          ],
+          "opacidad": 0.72,
+          "activaPorDefecto": false,
+          "atribucion": "Elaboración propia a partir de curvas de nivel 1:25 000 (SNIT). Clases: 1 Plano a casi plano 0–3% #1a9850 · 2 Ligeramente ondulado 3–8% #66bd63 · 3 Moderadamente ondulado 8–15% #a6d96a · 4 Ondulado 15–30% #fee08b · 5 Fuertemente ondulado 30–60% #fdae61 · 6 Escarpado 60–75% #e34a33 · 7 Fuertemente escarpado >75% #99000d."
+        },
+        {
+          "id": "inundacion",
+          "nombre": "Potencial de inundación",
+          "tipo": "geojson",
+          "url": "data/terrenos/inundacion.geojson",
+          "estilo": {
+            "color": "#2b8cc4",
+            "fillColor": "#2b8cc4",
+            "weight": 1.4,
+            "opacity": 0.95,
+            "fillOpacity": 0.28
+          },
+          "opacidad": 0.28,
+          "activaPorDefecto": false,
+          "tooltipHover": true,
+          "tooltipFijo": "<b>Potencial de inundación</b><br>Presencia",
+          "atribucion": "Comisión Nacional de Emergencias (CNE) — publicado en SNIT. Presencia única, sin categorización."
+        },
+        {
+          "id": "humedales",
+          "nombre": "Humedales (Registro Nacional)",
+          "tipo": "geojson",
+          "url": "data/terrenos/humedales.geojson",
+          "estilo": {
+            "color": "#17a2b8",
+            "fillColor": "#17a2b8",
+            "weight": 1.4,
+            "opacity": 0.95,
+            "fillOpacity": 0.32
+          },
+          "opacidad": 0.32,
+          "activaPorDefecto": false,
+          "tooltipHover": true,
+          "camposTooltip": [
+            [
+              "Humedal",
+              "nom_hum"
+            ],
+            [
+              "Tipo",
+              "tipo_hum"
+            ],
+            [
+              "Clase",
+              "clase_hum"
+            ]
+          ],
+          "atribucion": "Registro Nacional de Humedales — SINAC / SNIT"
+        }
+      ]
+    },
+    {
+      "id": "fuentes-agua",
+      "nombre": "Fuentes de agua y AP",
       "icono": "💧",
       "abierto": false,
       "capas": [
+        {
+          "id": "cauce-drenaje",
+          "nombre": "Cauce y drenaje",
+          "tipo": "geojson",
+          "url": "data/fuentes/cauce_drenaje.geojson.gz",
+          "comprimido": true,
+          "estilo": {
+            "color": "#1f74c0",
+            "weight": 1.2,
+            "opacity": 0.9,
+            "fillOpacity": 0
+          },
+          "resaltarHover": {
+            "color": "#0d4f8c",
+            "weight": 3.2
+          },
+          "activaPorDefecto": false,
+          "tooltipHover": true,
+          "campoEtiqueta": "nombre",
+          "etiquetaVacia": "Cauce sin nombre",
+          "atribucion": "Cartografía 1:25 000 — SNIT"
+        },
         {
           "id": "da-bananito",
           "nombre": "Reserva acuífera cuenca Río Bananito",
           "tipo": "wms",
           "url": "https://mapas.da.go.cr/geopc.php",
-          "params": { "layers": "Aguas:AyA_AREA_DE_RESERVA_ACUIFERA_CUENCA_DEL_RIO_BANANITO", "format": "image/png", "transparent": true, "version": "1.1.1" },
+          "params": {
+            "layers": "Aguas:AyA_AREA_DE_RESERVA_ACUIFERA_CUENCA_DEL_RIO_BANANITO",
+            "format": "image/png",
+            "transparent": true,
+            "version": "1.1.1"
+          },
           "opacidad": 0.85,
           "activaPorDefecto": false,
           "atribucion": "Dirección de Agua (MINAE) — mapas.da.go.cr"
@@ -73,7 +698,12 @@
           "nombre": "Reserva acuífera Puente de Mulas",
           "tipo": "wms",
           "url": "https://mapas.da.go.cr/geopc.php",
-          "params": { "layers": "Aguas:AyA_AREA_DE_RESERVA_ACUIFERA_PUENTE_MULAS", "format": "image/png", "transparent": true, "version": "1.1.1" },
+          "params": {
+            "layers": "Aguas:AyA_AREA_DE_RESERVA_ACUIFERA_PUENTE_MULAS",
+            "format": "image/png",
+            "transparent": true,
+            "version": "1.1.1"
+          },
           "opacidad": 0.85,
           "activaPorDefecto": false,
           "atribucion": "Dirección de Agua (MINAE) — mapas.da.go.cr"
@@ -83,28 +713,15 @@
           "nombre": "Reserva acuífera de Guácimo",
           "tipo": "wms",
           "url": "https://mapas.da.go.cr/geopc.php",
-          "params": { "layers": "Aguas:AyA_RESERVA_ACUIFERA_DE_GUACIMO", "format": "image/png", "transparent": true, "version": "1.1.1" },
+          "params": {
+            "layers": "Aguas:AyA_RESERVA_ACUIFERA_DE_GUACIMO",
+            "format": "image/png",
+            "transparent": true,
+            "version": "1.1.1"
+          },
           "opacidad": 0.85,
           "activaPorDefecto": false,
           "atribucion": "Dirección de Agua (MINAE) — mapas.da.go.cr"
-        }
-      ]
-    },
-    {
-      "id": "vector-local",
-      "nombre": "Datos locales de ejemplo",
-      "icono": "📍",
-      "abierto": false,
-      "capas": [
-        {
-          "id": "demo-poligono",
-          "nombre": "Polígono de ejemplo (GeoJSON local)",
-          "tipo": "geojson",
-          "url": "data/ejemplo.geojson",
-          "estilo": { "color": "#d9b14a", "weight": 2, "fillColor": "#d9b14a", "fillOpacity": 0.15 },
-          "activaPorDefecto": true,
-          "campoEtiqueta": "nombre",
-          "atribucion": "Datos de ejemplo — reemplazar por capa propia"
         }
       ]
     }

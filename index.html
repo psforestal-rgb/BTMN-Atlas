@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Visor Modular de Capas</title>
+<title>BTMN Atlas — Capas Geográficas BTMM</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"
   integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
 <link rel="stylesheet" href="css/styles.css">
@@ -13,7 +13,7 @@
 <div id="header">
   <button id="menu-btn" aria-label="Mostrar/ocultar panel de capas">☰</button>
   <div>
-    <h1 id="titulo-app">Visor Modular de Capas</h1>
+    <h1 id="titulo-app">BTMN Atlas</h1>
     <div class="sub" id="subtitulo-app"></div>
   </div>
 </div>
@@ -33,9 +33,13 @@
     </div>
 
     <div class="leyenda">
-      Plantilla de visor modular basada en Leaflet. Edite
+      Capas y simbología equivalentes a
+      <a href="https://psforestal-rgb.github.io/BTMM-Visados/" target="_blank" rel="noopener">BTMM-Visados</a>
+      (PNLQ, SINAC–ACC), reorganizadas para carga rápida por capa bajo
+      demanda. Visor genérico basado en Leaflet: edite
       <code>config/capas.json</code> para agregar módulos y capas propias
-      (WMS, teselas XYZ o GeoJSON) sin modificar el código.
+      (WMS, teselas XYZ, imagen georreferenciada o GeoJSON) sin modificar el
+      código.
     </div>
   </aside>
 
@@ -44,6 +48,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"
   integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"
+  integrity="sha384-rNlaE5fs9dGIjmxWDALQh/RBAaGRYT5ChrzHo6tRfgrZ36iRFAiquP5g41Jsv+0j" crossorigin="anonymous"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
