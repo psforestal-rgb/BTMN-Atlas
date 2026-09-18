@@ -1,0 +1,14 @@
+#ctrl-switches{margin:4px 0 2px}
+.ctrl-ficha{margin-top:8px;background:#0b1b35;border:1px solid #1a3358;border-radius:6px;padding:8px;font-size:12px;line-height:1.45}
+.ctrl-ficha.clave-campo{border-color:#c45c6a}
+.ctrl-ficha.clave-descartar{border-color:#8aa0bd}
+.ctrl-ficha.clave-revisar{border-color:#d9b14a}
+.ctrl-line{margin:2px 0}
+.ctrl-sug{margin-top:6px;color:#f3d27a;font-weight:600}
+.caso-row{background:#0b1b35;border:1px solid #294a7d;border-radius:6px;padding:6px 8px;margin-top:5px}
+.caso-tit{font-size:12px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace;color:#f3d27a}
+.caso-meta{font-size:10.5px;color:#8aa0bd;margin:2px 0 4px}
+.caso-estado{width:100%;background:#12294d;color:#eef3fb;border:1px solid #294a7d;border-radius:5px;padding:3px;font-size:11px}
+.caso-acc{display:flex;gap:6px;margin-top:5px}
+.caso-acc button{flex:1;background:#0b1b35;border:1px solid #294a7d;color:#9fc3ee;border-radius:5px;font-size:10.5px;font-weight:700;padding:3px;cursor:pointer}
+body.modo-control #control-card{border-color:#d9b14a;box-shadow:0 0 0 1px #d9b14a inset}
