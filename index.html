@@ -25,6 +25,31 @@
       <div id="basemaps-list"></div>
     </div>
 
+    <div class="basemap-card" id="control-card">
+      <div class="pt">Control de deforestación</div>
+      <label class="basemap-row">
+        <input type="checkbox" id="chk-modo-control"> Activar modo control
+      </label>
+      <div id="ctrl-switches">
+        <label class="basemap-row"><input type="checkbox" id="chk-ctrl-alertas"> 1. Alertas recientes (GFW)</label>
+        <label class="basemap-row"><input type="checkbox" id="chk-ctrl-bosque"> 2. ¿Era bosque? (2023 + JRC)</label>
+        <label class="basemap-row"><input type="checkbox" id="chk-ctrl-limites"> 3. Límites ASP / PNE</label>
+      </div>
+      <div class="capa-fuente" style="padding-left:2px;margin-top:4px">
+        Clic en una mancha → ficha de 3 preguntas → agregar a la cola de patrulla.
+      </div>
+      <div id="ctrl-ficha" class="ctrl-ficha" hidden></div>
+      <div class="acciones-modulo">
+        <button type="button" id="btn-caso-add" disabled>Agregar a la cola</button>
+        <button type="button" id="btn-casos-gpx">GPX de la cola</button>
+      </div>
+      <div class="acciones-modulo">
+        <button type="button" id="btn-casos-limpiar">Quitar cerrados</button>
+      </div>
+      <div class="pt" style="margin-top:8px">Cola de casos</div>
+      <div id="ctrl-cola"></div>
+    </div>
+
     <div class="basemap-card" id="campo-card">
       <div class="pt">Herramientas de campo</div>
       <label class="basemap-row">
@@ -81,5 +106,7 @@
 <script src="js/app.js"></script>
 <script src="js/campo.js"></script>
 <script src="js/identificar.js"></script>
+<script src="js/ctrl-hook.js"></script>
+<script src="js/control.js"></script>
 </body>
 </html>
