@@ -1,0 +1,67 @@
+{
+  "modulos": [
+    {
+      "id": "alertas-gfw",
+      "nombre": "Alertas tempranas de deforestación (GFW)",
+      "icono": "🚨",
+      "abierto": true,
+      "capas": [
+        {
+          "id": "gfw-integradas",
+          "nombre": "Alertas integradas (GLAD-L + S2 + RADD + DIST)",
+          "tipo": "tile",
+          "url": "https://tiles.globalforestwatch.org/gfw_integrated_dist_alerts/latest/default/{z}/{x}/{y}.png",
+          "opacidad": 0.85,
+          "activaPorDefecto": false,
+          "maxZoom": 22,
+          "maxNativeZoom": 14,
+          "atribucion": "Global Forest Watch / WRI. Combina GLAD-L (Landsat 30 m), GLAD-S2 (Sentinel-2 10 m), RADD (radar Sentinel-1) y DIST-ALERT. Píxeles rosados/rojos = disturbio reciente de vegetación. Capa de alerta, no de área oficial. https://www.globalforestwatch.org/"
+        },
+        {
+          "id": "glad-l",
+          "nombre": "GLAD-L — Landsat 30 m",
+          "tipo": "tile",
+          "url": "https://tiles.globalforestwatch.org/umd_glad_landsat_alerts/latest/default/{z}/{x}/{y}.png",
+          "opacidad": 0.85,
+          "activaPorDefecto": false,
+          "maxZoom": 22,
+          "maxNativeZoom": 14,
+          "atribucion": "UMD GLAD / GFW. Alertas ópticas Landsat ~30 m, trópicos. Útil para confirmar pérdida de dosel."
+        },
+        {
+          "id": "glad-s2",
+          "nombre": "GLAD-S2 — Sentinel-2 10 m",
+          "tipo": "tile",
+          "url": "https://tiles.globalforestwatch.org/umd_glad_sentinel2_alerts/latest/default/{z}/{x}/{y}.png",
+          "opacidad": 0.85,
+          "activaPorDefecto": false,
+          "maxZoom": 22,
+          "maxNativeZoom": 14,
+          "atribucion": "UMD GLAD / GFW. Alertas ópticas Sentinel-2 ~10 m; mejor detalle de claros y tala selectiva."
+        },
+        {
+          "id": "radd",
+          "nombre": "RADD — radar Sentinel-1 (nubes)",
+          "tipo": "tile",
+          "url": "https://tiles.globalforestwatch.org/wur_radd_alerts/latest/default/{z}/{x}/{y}.png",
+          "opacidad": 0.85,
+          "activaPorDefecto": false,
+          "maxZoom": 22,
+          "maxNativeZoom": 14,
+          "atribucion": "Wageningen University / GFW. Radar Sentinel-1 ~10 m; detecta cambio bajo nubes, útil en la vertiente Caribe y época lluviosa."
+        },
+        {
+          "id": "hansen-loss",
+          "nombre": "Pérdida anual de dosel Hansen (histórico)",
+          "tipo": "tile",
+          "url": "https://tiles.globalforestwatch.org/umd_tree_cover_loss/latest/default/{z}/{x}/{y}.png",
+          "opacidad": 0.75,
+          "activaPorDefecto": false,
+          "maxZoom": 22,
+          "maxNativeZoom": 12,
+          "atribucion": "Hansen / UMD / Google / USGS / NASA vía GFW. Pérdida anual de dosel (no alerta diaria). Complementa las series FONAFIFO/SINAC locales."
+        }
+      ]
+    }
+  ]
+}
