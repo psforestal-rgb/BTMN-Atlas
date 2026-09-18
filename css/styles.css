@@ -82,3 +82,11 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
   #sidebar.open{transform:translateX(0)}
   #main{position:relative}
 }
+
+/* field tools */
+.punto-info{margin-top:6px}
+.punto-coords{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:12px;background:#0b1b35;border:1px solid var(--line);border-radius:6px;
+  padding:6px 8px;margin-bottom:6px;color:#f3d27a;line-height:1.45}
+#map.modo-marcar{cursor:crosshair}
+.marcador-campo-popup .leaflet-popup-content{margin:8px 10px;font-size:12.5px}

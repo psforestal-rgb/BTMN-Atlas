@@ -43,12 +43,20 @@ archivo bajo `data/` y **solo se descarga cuando el usuario la activa**
 | Áreas Silvestres Protegidas | Los Quetzales, Cerro Las Vueltas, Tapantí-Macizo de la Muerte, Río Macho, Río Navarro-Río Sombrero | SINAC/SNIT |
 | Fincas estatales y PNE | Buffer 2 km Carretera Interamericana, PNE del SNIT, Terrenos sobre 3000 m, Fincas del Estado ACC, Tenencia histórica R.F. Río Macho 1966 (ráster + vector ITCO) | SNIT, ACC |
 | Terrenos forestales | Relieve (7 clases de pendiente), Potencial de inundación, Humedales | Elaboración propia / CNE / SINAC |
+| Alertas tempranas GFW | Alertas integradas (GLAD-L + GLAD-S2 + RADD + DIST), cada sistema por separado, y pérdida anual Hansen | Global Forest Watch / UMD / WUR |
 | Fuentes de agua y AP | Cauce y drenaje, capas WMS de la Dirección de Agua (mapas.da.go.cr) | SNIT, MINAE |
 
 Más el selector de mapa base (OpenStreetMap / Satélite Esri World
 Imagery). La simbología (colores por clase, reglas compuestas de la capa
 de tenencia histórica, resaltado al pasar el cursor en cauces, etc.) es la
 misma que usa BTMM-Visados.
+
+Las **alertas GFW** se sirven como teselas XYZ con fondo transparente
+(`tiles.globalforestwatch.org`). Solo se descargan al activar la capa.
+Son un indicador temprano de disturbio de vegetación (píxeles rosados o
+rojos), no un cálculo de área ni una prueba de infracción. Para
+verificar en campo: active la capa, marque el punto, copie lat/lon o
+descargue un GPX e introdúzcalo en el GPS o en el plan de vuelo.
 
 ## Cómo agregar capas o módulos propios
 
@@ -107,6 +115,9 @@ data/                Capas locales (GeoJSON, GeoJSON comprimido, imágenes
 - **Ortofotos:** IGN / [SNIT — Costa Rica](https://www.snitcr.go.cr/).
 - **Cobertura forestal:** FONAFIFO/CENIGA (2000, 2005) y SINAC (2012,
   2021, 2023).
+- **Alertas de deforestación / disturbio:** [Global Forest Watch](https://www.globalforestwatch.org/)
+  (teselas `gfw_integrated_dist_alerts`, GLAD-L, GLAD-S2, RADD y
+  `umd_tree_cover_loss`).
 - **Hidrología:** [Dirección de Agua, MINAE](https://mapas.da.go.cr/).
 - **Fincas del Estado:** Área de Conservación Central (ACC).
 - **Librerías:** [Leaflet](https://leafletjs.com/) y
