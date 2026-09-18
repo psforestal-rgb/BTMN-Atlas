@@ -25,6 +25,27 @@
       <div id="basemaps-list"></div>
     </div>
 
+    <div class="basemap-card" id="campo-card">
+      <div class="pt">Herramientas de campo</div>
+      <label class="basemap-row">
+        <input type="checkbox" id="chk-marcar-punto"> Marcar punto en el mapa
+      </label>
+      <div id="punto-info" class="punto-info" hidden>
+        <div id="punto-coords" class="punto-coords"></div>
+        <div class="acciones-modulo">
+          <button type="button" id="btn-copiar-coords">Copiar lat, lon</button>
+          <button type="button" id="btn-gpx">Descargar GPX</button>
+        </div>
+        <div class="acciones-modulo">
+          <button type="button" id="btn-abrir-maps">Abrir en Google Maps</button>
+          <button type="button" id="btn-borrar-punto">Quitar marca</button>
+        </div>
+      </div>
+      <div class="capa-fuente" style="padding-left:2px;margin-top:4px">
+        Clic en una mancha de alerta para fijar coordenadas y llevarlas al GPS o al plan de vuelo.
+      </div>
+    </div>
+
     <div id="modulos-list"></div>
 
     <div id="acciones-globales">
