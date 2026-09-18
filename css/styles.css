@@ -90,3 +90,21 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--
   padding:6px 8px;margin-bottom:6px;color:#f3d27a;line-height:1.45}
 #map.modo-marcar{cursor:crosshair}
 .marcador-campo-popup .leaflet-popup-content{margin:8px 10px;font-size:12.5px}
+
+/* identify */
+#ident-lista{display:flex;flex-direction:column;gap:4px;margin-top:2px}
+.ident-vacio{font-size:11px;color:#8aa0bd;line-height:1.45}
+.ident-item{display:flex;flex-direction:column;align-items:flex-start;gap:1px;
+  background:#0b1b35;border:1px solid #294a7d;color:var(--txt);border-radius:6px;
+  padding:6px 8px;cursor:pointer;text-align:left}
+.ident-item:hover{background:#12294d}
+.ident-item.on{border-color:var(--gold);background:#1a2f55}
+.ident-nom{font-size:12.4px;font-weight:700}
+.ident-grp{font-size:10px;color:#8aa0bd}
+#ident-attrs{margin-top:8px;background:#0b1b35;border:1px solid var(--line);border-radius:6px;padding:8px}
+.ident-attrs-tit{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:6px}
+.ident-kv{display:grid;grid-template-columns:42% 58%;gap:4px 8px;padding:3px 0;
+  border-bottom:1px solid #1a3358;font-size:11.5px}
+.ident-kv:last-child{border-bottom:none}
+.ident-kv dt{color:#8aa0bd}
+.ident-kv dd{color:var(--txt);word-break:break-word}
