@@ -1,4 +1,4 @@
-/* Herramientas de campo: marcar punto, copiar coordenadas y exportar GPX. */
+/* Herramientas de campo + carga del modulo de alertas GFW. */
 let marcadorCampo = null;
 let puntoCampo = null;
 
@@ -24,6 +24,21 @@ function iniciarHerramientasCampo() {
     window.open('https://www.google.com/maps?q=' + puntoCampo.lat + ',' + puntoCampo.lng, '_blank', 'noopener');
   });
   document.getElementById('btn-borrar-punto').addEventListener('click', borrarPuntoCampo);
+}
+
+async function cargarModuloAlertas() {
+  if (typeof construirModulos !== 'function') return;
+  if (document.querySelector('[data-modulo-id="alertas-gfw"]')) return;
+  try {
+    const extra = await fetch('config/alertas.json', { cache: 'no-store' }).then(r => r.json());
+    if (!extra || !extra.modulos || !extra.modulos.length) return;
+    construirModulos(extra.modulos);
+    const alertasEl = document.querySelector('[data-modulo-id="alertas-gfw"]');
+    const cobEl = document.querySelector('[data-modulo-id="cobertura"]');
+    if (alertasEl && cobEl) cobEl.after(alertasEl);
+  } catch (err) {
+    console.error('No se pudo cargar config/alertas.json', err);
+  }
 }
 
 function formatoCoords(lat, lng) {
@@ -108,8 +123,9 @@ function flashBoton(id, texto) {
 }
 
 function esperarMapaCampo() {
-  if (typeof map !== 'undefined' && map && typeof map.on === 'function') {
+  if (typeof map !== 'undefined' && map && typeof map.on === 'function' && typeof construirModulos === 'function') {
     iniciarHerramientasCampo();
+    cargarModuloAlertas();
     return;
   }
   setTimeout(esperarMapaCampo, 80);
