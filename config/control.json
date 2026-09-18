@@ -1,0 +1,60 @@
+{
+  "modulos": [
+    {
+      "id": "jrc-tmf",
+      "nombre": "Contraste histórico JRC (bosque húmedo tropical)",
+      "icono": "📘",
+      "abierto": false,
+      "capas": [
+        {
+          "id": "jrc-transicion",
+          "nombre": "Transición TMF — deforestación / degradación / regeneración",
+          "tipo": "wms",
+          "url": "https://ies-ows.jrc.ec.europa.eu/iforce/tmf_v1/wms.py",
+          "params": {
+            "layers": "TransitionMap_Subtypes",
+            "format": "image/png",
+            "transparent": true,
+            "version": "1.1.1"
+          },
+          "opacidad": 0.7,
+          "activaPorDefecto": false,
+          "maxZoom": 18,
+          "atribucion": "JRC / Comisión Europea — Tropical Moist Forest 1990–2025. Deforestación = disturbio persistente; degradación = daño temporal. Capa de contraste, no alerta diaria. https://forobs.jrc.ec.europa.eu/TMF"
+        },
+        {
+          "id": "jrc-defyear",
+          "nombre": "Año de deforestación persistente (JRC)",
+          "tipo": "wms",
+          "url": "https://ies-ows.jrc.ec.europa.eu/iforce/tmf_v1/wms.py",
+          "params": {
+            "layers": "DeforestationYear",
+            "format": "image/png",
+            "transparent": true,
+            "version": "1.1.1"
+          },
+          "opacidad": 0.75,
+          "activaPorDefecto": false,
+          "maxZoom": 18,
+          "atribucion": "JRC TMF — año en que el píxel dejó de ser bosque húmedo de forma persistente."
+        },
+        {
+          "id": "jrc-degyear",
+          "nombre": "Año de degradación (JRC)",
+          "tipo": "wms",
+          "url": "https://ies-ows.jrc.ec.europa.eu/iforce/tmf_v1/wms.py",
+          "params": {
+            "layers": "DegradationYear",
+            "format": "image/png",
+            "transparent": true,
+            "version": "1.1.1"
+          },
+          "opacidad": 0.75,
+          "activaPorDefecto": false,
+          "maxZoom": 18,
+          "atribucion": "JRC TMF — año del disturbio temporal (dosel que permanece bosque)."
+        }
+      ]
+    }
+  ]
+}
